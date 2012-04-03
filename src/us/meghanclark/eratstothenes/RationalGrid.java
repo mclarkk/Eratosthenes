@@ -9,7 +9,7 @@ import static java.lang.StrictMath.max;
  * Entry point for commencement of the prettiness.
  *
  * @author Meghan Clark
- * @author josh.essex
+ * @author Josh Essex
  */
 public class RationalGrid {
 

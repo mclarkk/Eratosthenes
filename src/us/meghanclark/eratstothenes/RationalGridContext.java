@@ -5,7 +5,7 @@ import java.awt.*;
 /**
  * A context object to bundle information needed by the frame for drawing.
  *
- * @author josh.essex
+ * @author Josh Essex
  */
 public class RationalGridContext {
 
