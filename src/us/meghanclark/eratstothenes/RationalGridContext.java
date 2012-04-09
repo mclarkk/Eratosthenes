@@ -11,10 +11,10 @@ public class RationalGridContext {
 
     protected static final int DEFAULT_ROWS = 225;
     protected static final int DEFAULT_COLUMNS = 360;
-    private static final int DEFAULT_CELL_WIDTH = 4;
-    private static final int DEFAULT_CELL_HEIGHT = 4;
-    private static final Color DEFAULT_EQUIVALENCE_COLOR = Color.BLUE;
-    private static final Color DEFAULT_DUPLICATE_COLOR = Color.BLACK;
+    protected static final int DEFAULT_CELL_WIDTH = 4;
+    protected static final int DEFAULT_CELL_HEIGHT = 4;
+    protected static final Color DEFAULT_EQUIVALENCE_COLOR = Color.BLUE;
+    protected static final Color DEFAULT_DUPLICATE_COLOR = Color.BLACK;
 
     private final int[][] matrix;
 

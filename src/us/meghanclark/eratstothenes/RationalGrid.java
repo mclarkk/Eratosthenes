@@ -13,6 +13,13 @@ import static java.lang.StrictMath.max;
  */
 public class RationalGrid {
 
+    private static final String ROW_FLAG = "-r";
+    private static final String COLUMN_FLAG = "-c";
+    private static final String CELL_WIDTH_FLAG = "-w";
+    private static final String CELL_HEIGHT_FLAG = "-h";
+    private static final String EQUIVALENCE_COLOR_FLAG = "-e";
+    private static final String DUPLICATE_COLOR_FLAG = "-d";
+
     public static void main(String[] args) {
         RationalGridContext rationalGridContext = parseArguments(args);
 
@@ -29,39 +36,63 @@ public class RationalGrid {
      * @return a context object built from the arguments
      */
     private static RationalGridContext parseArguments(String[] args) {
-        // TODO: Refactor this super hacky, horribly non-robust command line argument logic
-
         if (args.length == 0) {
             int[][] matrix = buildMatrix(RationalGridContext.DEFAULT_ROWS, RationalGridContext.DEFAULT_COLUMNS);
             return new RationalGridContext(matrix);
         }
 
+        int rows = RationalGridContext.DEFAULT_ROWS;
+        int columns = RationalGridContext.DEFAULT_COLUMNS;
+        int cellHeight = RationalGridContext.DEFAULT_CELL_HEIGHT;
+        int cellWidth = RationalGridContext.DEFAULT_CELL_WIDTH;
+        Color equivalenceColor = RationalGridContext.DEFAULT_EQUIVALENCE_COLOR;
+        Color duplicateColor = RationalGridContext.DEFAULT_DUPLICATE_COLOR;
+
         try {
-            int rows = Integer.parseInt(args[0]);
-            int columns = Integer.parseInt(args[1]);
-            int cellHeight = Integer.parseInt(args[2]);
-            int cellWidth = Integer.parseInt(args[3]);
+            for (int i = 0; i < args.length - 1; i++) {
+                String arg = args[i];
+                String nextArg = args[i + 1];
 
-            final Field equivField = Color.class.getField(args[4].toUpperCase());
-            Color equivalenceColor = (Color) equivField.get(null);
-
-            final Field dupField = Color.class.getField(args[5].toUpperCase());
-            Color duplicateColor = (Color) dupField.get(null);
-
-            int[][] matrix = buildMatrix(rows, columns);
-            return new RationalGridContext(matrix, columns, rows, cellWidth, cellHeight, equivalenceColor, duplicateColor);
+                if (arg.equals(ROW_FLAG)) {
+                    rows = Integer.parseInt(nextArg);
+                }
+                else if (arg.equals(COLUMN_FLAG)) {
+                    columns = Integer.parseInt(nextArg);
+                }
+                else if (arg.equals(CELL_HEIGHT_FLAG)) {
+                    cellHeight = Integer.parseInt(nextArg);
+                }
+                else if (arg.equals(CELL_WIDTH_FLAG)) {
+                    cellWidth = Integer.parseInt(nextArg);
+                }
+                else if (arg.equals(EQUIVALENCE_COLOR_FLAG)) {
+                    final Field equivField = Color.class.getField(nextArg.toUpperCase());
+                    equivalenceColor = (Color) equivField.get(null);
+                }
+                else if (arg.equals(DUPLICATE_COLOR_FLAG)) {
+                    final Field duplicateField = Color.class.getField(nextArg.toUpperCase());
+                    duplicateColor = (Color) duplicateField.get(null);
+                }
+            }
         }
         catch (Exception e) {
-            System.err.println("Usage: java RationalGrid [rows,columns,cell height,cell width, " +
-                    "equivalence color,duplicate color]");
-            System.err.println("Example: java RationalGrid 225 360 4 4 BLUE BLACK");
+            StringBuilder stringBuilder = new StringBuilder();
 
+            stringBuilder.append("Usage: java RationalGrid [options]\n");
+            stringBuilder.append("\t-r \tAmount of rows\n");
+            stringBuilder.append("\t-c \tAmount of columns\n");
+            stringBuilder.append("\t-w \tWidth of each cell (in pixels)\n");
+            stringBuilder.append("\t-h \tHeight of each cell (in pixels)\n");
+            stringBuilder.append("\t-e \tColor of equivalence class cells (must be a java.awt.Color)\n");
+            stringBuilder.append("\t-d \tColor of duplicate class cells (must be a java.awt.Color)\n");
+
+            System.err.println(stringBuilder.toString());
             System.exit(1);
         }
 
-        return null;
+        int[][] matrix = buildMatrix(rows, columns);
+        return new RationalGridContext(matrix, columns, rows, cellWidth, cellHeight, equivalenceColor, duplicateColor);
     }
-
 
     /**
      * Builds and returns the matrix.
