@@ -1,0 +1,5 @@
+cd src
+javac us/meghanclark/eratosthenes/*.java
+java us/meghanclark/eratosthenes/RationalGrid -r 400 -c 1000
+
+Note: Should figure out if this program can save images.
